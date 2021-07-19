@@ -1,0 +1,3 @@
+SOLO EJECUTA ESTE COMANDO
+
+java -jar Lavalink.jar
