@@ -1,8 +1,7 @@
 /java
 .vscode
-/bin/*
+/bin
 /obj
 
 config.json
-
 ConfigJson.cs

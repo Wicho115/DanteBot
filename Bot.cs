@@ -14,9 +14,7 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Net;
-using DSharpPlus.VoiceNext;
 using DSharpPlus.Lavalink;
-using DSharpPlus.Exceptions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
@@ -73,6 +71,7 @@ namespace DanteBot{
                 .AddSingleton<GameSessionHandler>()
                 .AddSingleton<GameSessionMessages>()
                 .AddSingleton<DeadGameMessages>()
+                .AddSingleton<TimerSession>()
                 .AddSingleton<MapacheGuild>(_ =>{
                     return new MapacheGuild(mapaGuild);
                 })
@@ -102,6 +101,7 @@ namespace DanteBot{
             commands.RegisterCommands<FunCommandModule>();
             commands.RegisterCommands<BananaCommandModule>();
             commands.RegisterCommands<GameCommandModule>();
+            commands.RegisterCommands<ModCommandModule>();
             #endregion
 
             #region ASYNC CONNECTIONS

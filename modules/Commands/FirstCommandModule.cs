@@ -98,7 +98,7 @@ namespace DanteBot{
             await context.Channel.SendMessageAsync(string.Join("\n", reactions));
         }
 
-        [Command("Timer")]
+        //[Command("Timer")]
         public async Task Timer(CommandContext ctx, double miliSeconds){
             Timer timer = new Timer(miliSeconds);
             int i = 0;
@@ -115,7 +115,7 @@ namespace DanteBot{
             timer.Start();
         }
 
-        [Command("Stop")]
+        //[Command("Stop")]
         public async Task Stop(CommandContext context){
             stoped = true;
             await context.RespondAsync("Se paró el Timer");

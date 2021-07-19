@@ -40,6 +40,9 @@ namespace DanteBot.Handlers{
         public DiscordRole BananaRole{get{
                 return MapaGuild.GetRole(846600497737891872);
             }}
+        public DiscordRole MutedRole{get{
+                return MapaGuild.GetRole(858933298196512789);
+            }}
         #endregion
         public MapacheGuild(DiscordGuild mapaGuild){
             MapaGuild = mapaGuild;
