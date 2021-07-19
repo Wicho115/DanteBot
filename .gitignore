@@ -1,4 +1,6 @@
 .vscode
+/bin
+/obj
 
 config.json
 ConfigJson.cs
