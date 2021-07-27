@@ -12,6 +12,8 @@ using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Entities;
 
 using Extension.DiscordMemberExtension;
+
+using DanteBot.Handlers;
 using DanteBot.CustomMessages;
 
 namespace DanteBot{
@@ -19,6 +21,7 @@ namespace DanteBot{
     public class FunCommandModule : BaseCommandModule{
 
         public DeadGameMessages deadGameMessages {private get; set;}
+        public MapacheGuild mapaService {private get; set;}
 
         #region CONFESAR COMMAND
         [Command("Confesar")]
@@ -204,7 +207,7 @@ namespace DanteBot{
         }    
 
         public async Task FinDelJuego(CommandContext ctx, DiscordMember ganador, DiscordMember perdedor){
-            // TODO Muted Role Logic            
+            await mapaService.Mutear(perdedor, 5000);
             await ctx.Channel.SendMessageAsync(deadGameMessages.Winner(ganador, perdedor));
         }
         public async Task Empate(CommandContext ctx){

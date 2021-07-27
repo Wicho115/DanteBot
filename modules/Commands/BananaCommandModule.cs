@@ -43,13 +43,15 @@ namespace DanteBot{
                 }
             };
 
-            var SendedMessage = await ctx.Guild.GetChannel(804581949615505440).SendMessageAsync(MessageEmbed);
+            var SendedMessage = await ctx.Guild.GetChannel(840450708850868244).SendMessageAsync(MessageEmbed);
             var result = await interactiviy.WaitForReactionAsync(
                 x =>{
                     var member = x.Guild.GetMemberAsync(x.User.Id).Result;
                     return (x.Message == SendedMessage && !member.Roles.Contains(BananaRole));
                 }, timeoutoverride : TimeSpan.FromSeconds(2));
             if(result.Result == null){
+                await SendedMessage.DeleteAsync();
+                await ctx.RespondAsync("Nadie quizo");
                 return;
             }
             await SendedMessage.DeleteAsync();
@@ -68,7 +70,7 @@ namespace DanteBot{
                 Color = DiscordColor.Yellow          
             };
 
-            var lastMessage = await ctx.Guild.GetChannel(804581949615505440).SendMessageAsync(EmbedBanana);
+            var lastMessage = await ctx.Guild.GetChannel(840450708850868244).SendMessageAsync(EmbedBanana);
             Thread.Sleep(3000);
             await lastMessage.DeleteAsync();
         }

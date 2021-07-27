@@ -9,7 +9,7 @@ namespace DanteBot.CustomMessages{
             return new DiscordEmbedBuilder{
                 Title = $"{ganador.Username} Es el ganador!",
                 Color = DiscordColor.Purple,
-                Description = $"{perdedor.Mention} se lleva Muted por 5 minutos",
+                Description = $"{perdedor.Mention} se lleva Muted por 1 minuto",
                 Thumbnail = 
                 new DiscordEmbedBuilder.EmbedThumbnail{Url = ganador.AvatarUrl},
                 Footer = new DiscordEmbedBuilder.EmbedFooter{IconUrl = perdedor.AvatarUrl, 
@@ -44,7 +44,7 @@ namespace DanteBot.CustomMessages{
                         
             return new MensajesJugadoresPPT{
                 MensajeJugador = mensajeJugador,
-                MensajeRetado = mensajeJugador
+                MensajeRetado = mensajeRetado
             };
         }
     }

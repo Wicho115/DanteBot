@@ -97,28 +97,5 @@ namespace DanteBot{
             var reactions = pollResult.Where(x => x.Total > 0).Select(x => $"{x.Emoji}: {x.Total}");                  
             await context.Channel.SendMessageAsync(string.Join("\n", reactions));
         }
-
-        //[Command("Timer")]
-        public async Task Timer(CommandContext ctx, double miliSeconds){
-            Timer timer = new Timer(miliSeconds);
-            int i = 0;
-            timer.Elapsed += async (sender, e) => {
-                if(stoped){
-                    timer.Stop();
-                    timer.Dispose();
-                    stoped = false;
-                }else{
-                    await ctx.RespondAsync($"Es la vez numero {++i} que se usa el timer, SignalTime :{e.SignalTime}");
-                }
-            };
-            await ctx.RespondAsync("Inicia el timer");
-            timer.Start();
-        }
-
-        //[Command("Stop")]
-        public async Task Stop(CommandContext context){
-            stoped = true;
-            await context.RespondAsync("Se paró el Timer");
-        }
     }
 }

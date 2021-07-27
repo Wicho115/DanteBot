@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+using System.Timers;
 using DSharpPlus.Entities;
 using DSharpPlus;
 using DSharpPlus.Net;
@@ -43,9 +46,27 @@ namespace DanteBot.Handlers{
         public DiscordRole MutedRole{get{
                 return MapaGuild.GetRole(858933298196512789);
             }}
+        public DiscordRole IntegranteRole{get{
+                return MapaGuild.GetRole(804593854959058984);
+            }}
         #endregion
         public MapacheGuild(DiscordGuild mapaGuild){
             MapaGuild = mapaGuild;
-        }        
+        }      
+
+        public async Task Mutear(DiscordMember miembro, double miliseconds, Action callback = null){
+            await miembro.GrantRoleAsync(MutedRole);
+            await miembro.RevokeRoleAsync(IntegranteRole);
+            
+            Timer timer = new Timer(miliseconds);
+            timer.AutoReset = false;
+            timer.Elapsed += async (sender, e) =>{      
+                    await miembro.GrantRoleAsync(IntegranteRole);
+                    await miembro.RevokeRoleAsync(MutedRole);
+                    callback?.Invoke();            
+            };
+
+            timer.Start();
+        }
     }
 }
