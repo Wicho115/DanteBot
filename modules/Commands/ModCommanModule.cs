@@ -36,4 +36,43 @@ public class ModCommandModule : BaseCommandModule{
             await message.DeleteAsync(3000);
         });
     }    
+
+    [Command("mute")]
+    [RequireRoles(RoleCheckMode.Any, "Moderador", "Administrador")]
+    public async Task Mute(CommandContext ctx, DiscordMember persona){
+        await ctx.Message.DeleteAsync();
+    }
+
+    [Command("embed")]
+    [RequireRoles(RoleCheckMode.Any, "Administrador", "Moderador")]
+    public async Task EmbedBuild(CommandContext ctx, DiscordColor color, DiscordChannel canalDestino){
+        await ctx.Message.DeleteAsync();
+        var interactivity = ctx.Client.GetInteractivity();
+
+        var embed = new DiscordEmbedBuilder();
+        embed.Color = color;
+        var messagetitle = await ctx.Channel.SendMessageAsync("Responda a continuacion con el titulo");
+        var titulo = await interactivity.WaitForMessageAsync(x => x.Author == ctx.Member );
+        await messagetitle.DeleteAsync();
+        embed.Title = titulo.Result.Content;
+        await titulo.Result.DeleteAsync();
+
+        var messageContent = await ctx.Channel.SendMessageAsync("Responda a continuacion con el contenido");
+        var contenido = await interactivity.WaitForMessageAsync(x => x.Author == ctx.Member);
+        await messageContent.DeleteAsync();
+        embed.Description = contenido.Result.Content;
+        await contenido.Result.DeleteAsync();
+
+        embed.Footer = new DiscordEmbedBuilder.EmbedFooter{
+            Text = $"Autor: {ctx.User.Username}",
+            IconUrl = ctx.User.AvatarUrl
+        };
+        await canalDestino.SendMessageAsync(embed);
+    }
+
+   /*  [Command("embed")]
+    [RequireRoles(RoleCheckMode.Any, "Administrador", "Moderador")]
+    public async Task EmbedBuild(CommandContext ctx, DiscordColor color, DiscordChannel canal){
+        
+    } */
 }

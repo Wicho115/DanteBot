@@ -101,7 +101,7 @@ namespace DanteBot{
             commands.RegisterCommands<FunCommandModule>();
             commands.RegisterCommands<BananaCommandModule>();
             commands.RegisterCommands<GameCommandModule>();
-            commands.RegisterCommands<ModCommandModule>();
+            commands.RegisterCommands<ModCommandModule>();            
             #endregion
 
             #region ASYNC CONNECTIONS

@@ -14,6 +14,6 @@ namespace Extension.DiscordMemberExtension{
             var ModRole = ctx.Guild.GetRole(804593782673637416);
             var roles = ctx.Member.Roles;
             return roles.Contains(ModRole) || roles.Contains(AdminRole) ;
-        }
+        }        
     }
 }

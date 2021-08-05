@@ -55,13 +55,13 @@ namespace DanteBot.Handlers{
         }      
 
         public async Task Mutear(DiscordMember miembro, double miliseconds, Action callback = null){
+            if(!miembro.IsBot) await miembro.RevokeRoleAsync(IntegranteRole);
             await miembro.GrantRoleAsync(MutedRole);
-            await miembro.RevokeRoleAsync(IntegranteRole);
             
             Timer timer = new Timer(miliseconds);
             timer.AutoReset = false;
             timer.Elapsed += async (sender, e) =>{      
-                    await miembro.GrantRoleAsync(IntegranteRole);
+                    if(!miembro.IsBot) await miembro.GrantRoleAsync(IntegranteRole);
                     await miembro.RevokeRoleAsync(MutedRole);
                     callback?.Invoke();            
             };

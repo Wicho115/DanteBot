@@ -12,6 +12,7 @@ using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.Entities;
 
 using Extension.DiscordMemberExtension;
+using Extension.DiscordMessageExtension;
 
 using DanteBot.Handlers;
 using DanteBot.CustomMessages;
@@ -94,7 +95,7 @@ namespace DanteBot{
         }
         #endregion
 
-        #region PPPT
+        #region PPT
         [Command("ppt")]
         [Cooldown(1, 10f, CooldownBucketType.User)]
         public async Task PiedraPapelTijera(CommandContext ctx, DiscordMember retado){
@@ -104,6 +105,11 @@ namespace DanteBot{
             }
 
             if(retado.IsBot){
+                if(retado == ctx.Client.CurrentUser){
+                    Console.WriteLine("Estás jugando con el bot");
+                    await PiedraPapelTijera(ctx);
+                    return;
+                }
                 if(ctx.User.IsBanana())
                 await ctx.RespondAsync("BANANA NO PUEDES JUGAR PIEDRA PAPEL O TIJERA CON LOS BOTS!!!");
                 else 
@@ -204,14 +210,111 @@ namespace DanteBot{
                 }
             }
             #endregion
-        }    
+        }   
+        #endregion 
 
+        #region EndGame Methods
         public async Task FinDelJuego(CommandContext ctx, DiscordMember ganador, DiscordMember perdedor){
-            await mapaService.Mutear(perdedor, 5000);
+            await mapaService.Mutear(perdedor, 30000);
             await ctx.Channel.SendMessageAsync(deadGameMessages.Winner(ganador, perdedor));
         }
         public async Task Empate(CommandContext ctx){
             await ctx.Channel.SendMessageAsync(deadGameMessages.Tie(ctx));
+        }
+        #endregion
+
+        #region PPTBOT
+        public async Task PiedraPapelTijera(CommandContext ctx){
+            var intereactivy = ctx.Client.GetInteractivity();
+            Console.WriteLine("conseguiste interactividad");
+
+            var retado = (await ctx.Guild.GetAllMembersAsync())
+                        .Single(x => x == ctx.Client.CurrentUser);
+
+            Console.WriteLine("se hizo un discordmember");
+            Random randoms = new Random();
+            
+            var AceeptanceEmbed = new DiscordEmbedBuilder{
+                Color = DiscordColor.Purple,
+                Title = "Piedra 💎, Papel 📄, Tijera ✂",
+                Description = $"Hey! estas retando a {ctx.Client.CurrentUser.Mention} a 'Piedra, Papel, Tijera.., ¿Estás seguro?'"
+            };
+            var CheckedBoxEmoji = DiscordEmoji.FromName(ctx.Client, ":ballot_box_with_check:");
+            var ExBoxEmoji = DiscordEmoji.FromName(ctx.Client, ":x:");
+
+            var messageDuel = await ctx.Channel.SendMessageAsync(AceeptanceEmbed);
+
+            await messageDuel.CreateReactionAsync(CheckedBoxEmoji);
+            await messageDuel.CreateReactionAsync(ExBoxEmoji);
+
+            var resultReact = await intereactivy.WaitForReactionAsync(
+                x => x.User == ctx.User && (x.Emoji == CheckedBoxEmoji || x.Emoji == ExBoxEmoji) && x.Message == messageDuel);
+            await messageDuel.DeleteAsync(1000);
+
+            if(resultReact.Result.Emoji == CheckedBoxEmoji){
+                await ctx.Channel.SendMessageAsync($"Has desafiado a {ctx.Client.CurrentUser.Mention} el poderoso");
+            }else if(resultReact.Result.Emoji == ExBoxEmoji){
+                await ctx.Channel.SendMessageAsync($"Has declinado la oferta de desafiar a {ctx.Client.CurrentUser.Mention}");
+                return;
+            }else{
+                return;
+            }
+
+            var PiedraEmoji = DiscordEmoji.FromName(ctx.Client, ":gem:");
+            var PapelEmoji = DiscordEmoji.FromName(ctx.Client, ":page_facing_up:");
+            var TijeraEmoji = DiscordEmoji.FromName(ctx.Client, ":scissors:");
+
+            DiscordEmoji[] emojisPPT = {PiedraEmoji, PapelEmoji, TijeraEmoji};
+
+            var emojiRetado = emojisPPT[randoms.Next(0,3)];
+
+            var gameEmbed = new DiscordEmbedBuilder{
+                Color = DiscordColor.Blue,
+                Title = "Selecciona Tu Ataque",
+                Description = $"Reacciona a una de las siguientes opciones y elige con que arma lucharás!",
+                Footer = new DiscordEmbedBuilder.EmbedFooter{Text = "💎  ||  📄  ||  ✂"}
+            };
+
+            var message = await ctx.Member.SendMessageAsync(gameEmbed);
+
+            await message.CreateReactionAsync(PiedraEmoji);
+            await message.CreateReactionAsync(PapelEmoji);
+            await message.CreateReactionAsync(TijeraEmoji);
+
+            var reaccion = await intereactivy.WaitForReactionAsync(x => x.Message == message && 
+                    (x.Emoji == PiedraEmoji || x.Emoji == PapelEmoji || x.Emoji == TijeraEmoji) &&
+                    x.User == ctx.User);
+            var emojiJugador = reaccion.Result.Emoji;
+
+            Thread.Sleep(1750);
+            
+            #region Winning logic
+            if(emojiJugador == PiedraEmoji){
+                if(emojiRetado == PapelEmoji){
+                    await FinDelJuego(ctx, retado, ctx.Member);                    
+                }else if(emojiRetado == TijeraEmoji){
+                    await FinDelJuego(ctx, ctx.Member, retado);
+                }else{
+                    await Empate(ctx);
+                }
+            }else if(emojiJugador == PapelEmoji){
+                if(emojiRetado == TijeraEmoji){
+                    await FinDelJuego(ctx, retado, ctx.Member);
+                }else if(emojiRetado == PiedraEmoji){
+                    await FinDelJuego(ctx, ctx.Member, retado);
+                }else{
+                    await Empate(ctx);
+                }
+            }else if(emojiJugador == TijeraEmoji){
+                if(emojiRetado == PiedraEmoji){
+                    await FinDelJuego(ctx, retado, ctx.Member);
+                }else if(emojiRetado == PapelEmoji){
+                    await FinDelJuego(ctx, ctx.Member, retado);
+                }else{
+                    await Empate(ctx);
+                }
+            }
+            #endregion
         }
         #endregion
     }

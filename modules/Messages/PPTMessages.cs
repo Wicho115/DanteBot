@@ -9,7 +9,7 @@ namespace DanteBot.CustomMessages{
             return new DiscordEmbedBuilder{
                 Title = $"{ganador.Username} Es el ganador!",
                 Color = DiscordColor.Purple,
-                Description = $"{perdedor.Mention} se lleva Muted por 1 minuto",
+                Description = $"{perdedor.Mention} se lleva Muted por 30 segundos",
                 Thumbnail = 
                 new DiscordEmbedBuilder.EmbedThumbnail{Url = ganador.AvatarUrl},
                 Footer = new DiscordEmbedBuilder.EmbedFooter{IconUrl = perdedor.AvatarUrl, 
@@ -17,11 +17,11 @@ namespace DanteBot.CustomMessages{
             };
         }
 
-        public DiscordEmbedBuilder Tie(CommandContext ctx, string title = "Nadie gana :c"){
+        public DiscordEmbedBuilder Tie(CommandContext ctx, string title = "Nadie gana! Suerte la proxima!"){
             return new DiscordEmbedBuilder{
                 Title = title,
                 Color = DiscordColor.Aquamarine,
-                Description = "Los 2 perdieron que malos XDDDDDDDD",
+                Description = "Hay Un Empate!!!",
                 Author = new DiscordEmbedBuilder.EmbedAuthor{
                     IconUrl = ctx.Client.CurrentUser.AvatarUrl,
                     Name = "DanteBot"
