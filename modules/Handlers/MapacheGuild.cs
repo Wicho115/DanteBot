@@ -4,10 +4,12 @@ using System.Timers;
 using DSharpPlus.Entities;
 using DSharpPlus;
 using DSharpPlus.Net;
+using DSharpPlus.CommandsNext;
 
 namespace DanteBot.Handlers{
     public class MapacheGuild{
         public DiscordGuild MapaGuild {get; private set;}
+        //public DiscordEm
 
         #region CANALES FAMILIA MAPACHE
         public DiscordChannel GameCategoryChannel {get{
@@ -49,6 +51,16 @@ namespace DanteBot.Handlers{
         public DiscordRole IntegranteRole{get{
                 return MapaGuild.GetRole(804593854959058984);
             }}
+        #endregion
+        
+        #region EMOJIS
+            public static DiscordEmoji YesEmoji(CommandContext ctx){
+                return DiscordEmoji.FromName(ctx.Client, ":white_check_mark:");
+            }
+
+            public static DiscordEmoji NoEmoji(CommandContext ctx){
+                return DiscordEmoji.FromName(ctx.Client, ":no_entry_sign:");
+            }
         #endregion
         public MapacheGuild(DiscordGuild mapaGuild){
             MapaGuild = mapaGuild;

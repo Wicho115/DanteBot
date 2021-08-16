@@ -22,7 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://nuget.emzi0767.com/api/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -42,27 +43,31 @@
           "dependencies": {
             "DSharpPlus": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
             },
             "DSharpPlus.CommandsNext": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
             },
             "DSharpPlus.Interactivity": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
             },
             "DSharpPlus.Lavalink": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
             },
             "DSharpPlus.Rest": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
             },
             "DSharpPlus.VoiceNext": {
               "target": "Package",
-              "version": "[4.0.1, )"
+              "version": "[4.2.0-nightly-00962, )"
+            },
+            "IDoEverything.DSharpPlus.SlashCommands": {
+              "target": "Package",
+              "version": "[2.0.0, )"
             }
           },
           "imports": [

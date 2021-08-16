@@ -94,11 +94,22 @@ namespace DanteBot{
             await ctx.RespondAsync("Tu confesión ha sido enviada!");
         }
         #endregion
-
-        #region PPT
+        
+        #region PPT COMMAND
         [Command("ppt")]
         [Cooldown(1, 10f, CooldownBucketType.User)]
-        public async Task PiedraPapelTijera(CommandContext ctx, DiscordMember retado){
+        public async Task PPT(CommandContext ctx, DiscordMember retado){
+            if(await MessageHandler.AwaitResponse(ctx, deadGameMessages.Confirmation(ctx))){
+                await PiedraPapelTijera(ctx, retado, true);                
+            }else{
+                await PiedraPapelTijera(ctx, retado, false);
+            }
+        }
+        #endregion
+
+        #region PPT
+        
+        public async Task PiedraPapelTijera(CommandContext ctx, DiscordMember retado, bool muerte){
             if(ctx.Channel.IsPrivate){
                 await ctx.RespondAsync("Debes estar en el servidor para usar este comando");
                 return;
@@ -107,7 +118,7 @@ namespace DanteBot{
             if(retado.IsBot){
                 if(retado == ctx.Client.CurrentUser){
                     Console.WriteLine("Estás jugando con el bot");
-                    await PiedraPapelTijera(ctx);
+                    await PiedraPapelTijera(ctx, muerte);
                     return;
                 }
                 if(ctx.User.IsBanana())
@@ -128,9 +139,10 @@ namespace DanteBot{
             var arrayPlayers = new DiscordUser[]{ctx.User, retado};
             
             var AceeptanceEmbed = new DiscordEmbedBuilder{
-                Color = DiscordColor.Purple,
-                Title = "Piedra 💎, Papel 📄, Tijera ✂",
-                Description = $"Hey! {retado.Mention}, {ctx.User.Mention} te ha retado a 'Piedra, Papel, Tijera.., ¿Aceptas?'"
+                Color = (muerte) ? DiscordColor.Red : DiscordColor.Purple,
+                Title = "Piedra 💎, Papel 📄, Tijera ✂" + $" {((muerte) ? " || ☠" : "")}",
+                Description = $"Hey! {retado.Mention}, {ctx.User.Mention} te ha retado a 'Piedra, Papel, Tijera'"
+                + $"{((muerte) ? "\nA MUERTEEEE" : "")}" + ", ¿Aceptas?"
             };
             var CheckedBoxEmoji = DiscordEmoji.FromName(ctx.Client, ":ballot_box_with_check:");
             var ExBoxEmoji = DiscordEmoji.FromName(ctx.Client, ":x:");
@@ -186,25 +198,25 @@ namespace DanteBot{
             #region WINNING LOGIC
             if(emojiJugador == PiedraEmoji){
                 if(emojiRetado == PapelEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);                    
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);                    
                 }else if(emojiRetado == TijeraEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }
             }else if(emojiJugador == PapelEmoji){
                 if(emojiRetado == TijeraEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);
                 }else if(emojiRetado == PiedraEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }
             }else if(emojiJugador == TijeraEmoji){
                 if(emojiRetado == PiedraEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);
                 }else if(emojiRetado == PapelEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }
@@ -214,9 +226,13 @@ namespace DanteBot{
         #endregion 
 
         #region EndGame Methods
-        public async Task FinDelJuego(CommandContext ctx, DiscordMember ganador, DiscordMember perdedor){
-            await mapaService.Mutear(perdedor, 30000);
-            await ctx.Channel.SendMessageAsync(deadGameMessages.Winner(ganador, perdedor));
+        public async Task FinDelJuego(CommandContext ctx, DiscordMember ganador, DiscordMember perdedor, bool muerte){
+            if(muerte){
+                await mapaService.Mutear(perdedor, 30000);
+                await ctx.Channel.SendMessageAsync(deadGameMessages.WinnerMuerte(ganador, perdedor));
+            }else
+                await ctx.Channel.SendMessageAsync(deadGameMessages.Winner(ganador, perdedor));
+            
         }
         public async Task Empate(CommandContext ctx){
             await ctx.Channel.SendMessageAsync(deadGameMessages.Tie(ctx));
@@ -224,7 +240,7 @@ namespace DanteBot{
         #endregion
 
         #region PPTBOT
-        public async Task PiedraPapelTijera(CommandContext ctx){
+        public async Task PiedraPapelTijera(CommandContext ctx, bool muerte){
             var intereactivy = ctx.Client.GetInteractivity();
             Console.WriteLine("conseguiste interactividad");
 
@@ -291,25 +307,25 @@ namespace DanteBot{
             #region Winning logic
             if(emojiJugador == PiedraEmoji){
                 if(emojiRetado == PapelEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);                    
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);                    
                 }else if(emojiRetado == TijeraEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }
             }else if(emojiJugador == PapelEmoji){
                 if(emojiRetado == TijeraEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);
                 }else if(emojiRetado == PiedraEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }
             }else if(emojiJugador == TijeraEmoji){
                 if(emojiRetado == PiedraEmoji){
-                    await FinDelJuego(ctx, retado, ctx.Member);
+                    await FinDelJuego(ctx, retado, ctx.Member, muerte);
                 }else if(emojiRetado == PapelEmoji){
-                    await FinDelJuego(ctx, ctx.Member, retado);
+                    await FinDelJuego(ctx, ctx.Member, retado, muerte);
                 }else{
                     await Empate(ctx);
                 }

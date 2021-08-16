@@ -17,12 +17,6 @@ namespace DanteBot{
 
         public MapacheGuild mapaService {private get; set;}
 
-        [Command("banana?")]
-        [MustBeBanana]
-        public async Task EresBanana(CommandContext ctx){
-            await ctx.RespondAsync(ctx.Member.IsBanana() ? "Si" : "No");
-        }
-
         [Command("BecomeAsBanana")]
         [RequireRoles(RoleCheckMode.All, "Administrador")]
         [Cooldown(1, 40000f, CooldownBucketType.Global)]

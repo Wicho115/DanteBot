@@ -14,6 +14,8 @@ using DSharpPlus.Entities;
 using DanteBot.Attributes;
 using DanteBot.Handlers;
 using Extension.DiscordMessageExtension;
+
+[RequireRoles(RoleCheckMode.Any, "Moderador", "Administrador")]
 public class ModCommandModule : BaseCommandModule{
     public MapacheGuild mapaService {private get; set;}
 

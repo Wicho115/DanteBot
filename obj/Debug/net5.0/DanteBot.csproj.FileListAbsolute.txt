@@ -31,3 +31,4 @@ D:\Wicho\Proyectos\Programacion\C#\DanteBot\obj\Debug\net5.0\DanteBot.dll
 D:\Wicho\Proyectos\Programacion\C#\DanteBot\obj\Debug\net5.0\ref\DanteBot.dll
 D:\Wicho\Proyectos\Programacion\C#\DanteBot\obj\Debug\net5.0\DanteBot.pdb
 D:\Wicho\Proyectos\Programacion\C#\DanteBot\obj\Debug\net5.0\DanteBot.genruntimeconfig.cache
+D:\Wicho\Proyectos\Programacion\C#\DanteBot\bin\Debug\net5.0\DSharpPlus.SlashCommands.dll

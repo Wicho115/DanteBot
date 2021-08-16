@@ -13,6 +13,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
 using DSharpPlus.Net;
 using DSharpPlus.Lavalink;
 using System.Threading.Tasks;
@@ -78,8 +79,20 @@ namespace DanteBot{
                 .BuildServiceProvider();                     
 
             #endregion
+            
+            #region SLASH COMMANDS
+            var SlashConfig = new SlashCommandsConfiguration{
+                Services = services
+            };
+            var slash = client.UseSlashCommands(SlashConfig);            
+            
+            slash.RegisterCommands<FirstSlash>(804581949615505438);
+            slash.RegisterCommands<UtilSlashCommands>(804581949615505438);
+            slash.RegisterCommands<FunSlashCommand>(804581949615505438);
+            #endregion
+
             #region COMMAND CONFIG
-            client.Ready += OnClientReady; 
+            client.Ready += OnClientReady;             
                        
 
             client.UseInteractivity(new InteractivityConfiguration{
@@ -96,8 +109,7 @@ namespace DanteBot{
             commands = client.UseCommandsNext(commandsConfig);            
             commands.CommandErrored += CmdHandleError;
 
-            commands.RegisterCommands<FirstCommandModule>();
-            //commands.RegisterCommands<LavalinkCommands>();            
+            commands.RegisterCommands<LavalinkCommands>();            
             commands.RegisterCommands<FunCommandModule>();
             commands.RegisterCommands<BananaCommandModule>();
             commands.RegisterCommands<GameCommandModule>();
@@ -112,7 +124,9 @@ namespace DanteBot{
             await Task.Delay(-1);
         }
         
-        private Task OnClientReady(DiscordClient sender, ReadyEventArgs e){            
+        private Task OnClientReady(DiscordClient sender, ReadyEventArgs e){  
+            var activity = new DiscordActivity("La Familia Mapache", ActivityType.Watching);
+            sender.UpdateStatusAsync(activity, UserStatus.Online);
             return Task.CompletedTask;
         }
 

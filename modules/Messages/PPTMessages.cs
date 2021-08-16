@@ -5,11 +5,30 @@ using DSharpPlus.CommandsNext;
 
 namespace DanteBot.CustomMessages{
     public class DeadGameMessages{
-        public DiscordEmbedBuilder Winner(DiscordMember ganador, DiscordMember perdedor){
+        public DiscordEmbedBuilder Confirmation(CommandContext ctx){
+            return new DiscordEmbedBuilder{
+                Title = "¿Juego a Muerte?",
+                Color = DiscordColor.SapGreen,
+                Description = $"{ctx.User.Mention} ¿Quieres jugar a Muerte?"
+            };
+        }
+        public DiscordEmbedBuilder WinnerMuerte(DiscordMember ganador, DiscordMember perdedor){
             return new DiscordEmbedBuilder{
                 Title = $"{ganador.Username} Es el ganador!",
                 Color = DiscordColor.Purple,
                 Description = $"{perdedor.Mention} se lleva Muted por 30 segundos",
+                Thumbnail = 
+                new DiscordEmbedBuilder.EmbedThumbnail{Url = ganador.AvatarUrl},
+                Footer = new DiscordEmbedBuilder.EmbedFooter{IconUrl = perdedor.AvatarUrl, 
+                Text = $"{perdedor.Username} es el perdedor"},
+            };
+        }
+
+        public DiscordEmbedBuilder Winner(DiscordMember ganador, DiscordMember perdedor){
+            return new DiscordEmbedBuilder{
+                Title = $"{ganador.Username} Es el ganador!",
+                Color = DiscordColor.Purple,
+                Description = $"{perdedor.Mention} pierde y se come un huevo podrido",
                 Thumbnail = 
                 new DiscordEmbedBuilder.EmbedThumbnail{Url = ganador.AvatarUrl},
                 Footer = new DiscordEmbedBuilder.EmbedFooter{IconUrl = perdedor.AvatarUrl, 
